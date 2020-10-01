@@ -127,3 +127,5 @@ def check_w(w: str):
     """
     if type(w) is not str:
         exit('w is not str')
+    if w == '':
+        exit('w is empty')
