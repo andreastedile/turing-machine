@@ -1,4 +1,4 @@
-from turingmachine.turing_machine import TuringMachine as TM
+from turing_machine.turing_machine.turing_machine import TuringMachine as TM
 
 Q = {'q_0', 'q_1', 'q_2', 'q_3', 'q_4'}
 Σ = {'0', '1'}

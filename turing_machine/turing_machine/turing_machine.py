@@ -1,39 +1,6 @@
-from turingmachine.assertions import assert_all
-
-
-class Tape(list):
-    def __init__(self, B: str):
-        self.B = B
-        super(Tape, self).__init__()
-
-    def __getitem__(self, index: int):
-        if index < 0 or index >= len(self):
-            return self.B
-        return super(Tape, self).__getitem__(index)
-
-    def __setitem__(self, index, value):
-        if index == -1:
-            self.insert(0, value)
-        elif index == len(self):
-            self.append(value)
-        else:
-            super(Tape, self).__setitem__(index, value)
-
-
-class Control:
-    def __init__(self, Q: set, Σ: set, Γ: set, δ: dict, q_0: str, B: str, F: set):
-        self.Q = Q
-        self.Σ = Σ
-        self.Γ = Γ
-        self._δ = δ
-        self.q_0 = q_0
-        self.B = B
-        self.F = F
-
-        self.q = self.q_0  # current state
-
-    def δ(self, q, X) -> tuple:
-        return self._δ[(q, X)]
+from turing_machine.utils.assertions import assert_all
+from turing_machine.control.control import Control
+from turing_machine.tape.tape import Tape
 
 
 class TuringMachine:
