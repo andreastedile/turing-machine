@@ -1,0 +1,34 @@
+from unittest import TestCase
+
+from turing_machine.control.control import Control
+
+Q = {'q_0', 'q_1', 'q_2', 'q_3', 'q_4'}
+Σ = {'0', '1'}
+Γ = {'0', '1', 'X', 'Y', 'B'}
+δ = {
+    ('q_0', '0'): ('q_1', 'X', 'R'),
+    ('q_0', 'Y'): ('q_3', 'Y', 'R'),
+
+    ('q_1', '0'): ('q_1', '0', 'R'),
+    ('q_1', '1'): ('q_2', 'Y', 'L'),
+    ('q_1', 'Y'): ('q_1', 'Y', 'R'),
+
+    ('q_2', '0'): ('q_2', '0', 'L'),
+    ('q_2', 'X'): ('q_0', 'X', 'R'),
+    ('q_2', 'Y'): ('q_2', 'Y', 'L'),
+
+    ('q_3', 'Y'): ('q_3', 'Y', 'R'),
+    ('q_3', 'B'): ('q_4', 'B', 'R'),
+}
+
+
+class TestControl(TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.control = Control(Q, Σ, Γ, δ, 'q_0', 'B', {'q_4'})
+
+    def test_key_value(self):
+        self.assertTupleEqual(self.control.δ('q_0', '0'), ('q_1', 'X', 'R'))
+
+    def test_wrong_key(self):
+        self.assertRaises(KeyError, lambda: self.control.δ('foo', 'fee'))
