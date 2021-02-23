@@ -1,4 +1,4 @@
-from src.assertions import assert_all
+from turingmachine.assertions import assert_all
 
 
 class Tape(list):
