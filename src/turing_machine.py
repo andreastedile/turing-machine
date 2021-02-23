@@ -1,82 +1,85 @@
-from src.checks import check_Q, check_Σ, check_Γ, check_δ, check_w
+from src.assertions import assert_all
 
 
 class Tape(list):
+    def __init__(self, B: str):
+        self.B = B
+        super(Tape, self).__init__()
+
     def __getitem__(self, index: int):
         if index < 0 or index >= len(self):
-            return '⊔'
+            return self.B
         return super(Tape, self).__getitem__(index)
 
+    def __setitem__(self, index, value):
+        if index == -1:
+            self.insert(0, value)
+        elif index == len(self):
+            self.append(value)
+        else:
+            super(Tape, self).__setitem__(index, value)
 
-class TuringMachine:
-    def __init__(self, Q: set, Σ: set, Γ: set, δ, q_1, q_accept, q_reject):
-        check_Q(Q, q_1, q_accept, q_reject)
-        check_Σ(Σ)
-        check_Γ(Γ, Σ)
-        check_δ(δ, Q, Γ, q_accept, q_reject)
 
+class Control:
+    def __init__(self, Q: set, Σ: set, Γ: set, δ: dict, q_0: str, B: str, F: set):
         self.Q = Q
         self.Σ = Σ
         self.Γ = Γ
-        self.δ = δ
-        self.q_1 = q_1
-        self.q_accept = q_accept
-        self.q_reject = q_reject
+        self._δ = δ
+        self.q_0 = q_0
+        self.B = B
+        self.F = F
 
-        self.current_state = self.q_1
-        self.tape = Tape()
-        self.head = 0
+        self.q = self.q_0  # current state
 
-    def __str__(self):
-        """Returns an Instantaneous Description"""
-        tape = self.tape.copy()
-        tape.insert(self.head, self.current_state)
-        return ' '.join(tape)
+    def δ(self, q, X) -> tuple:
+        return self._δ[(q, X)]
 
-    def move_head_left(self):
-        """Moves the head to the left"""
-        if self.head == 0:
-            self.tape.insert(0, '⊔')
-        else:
-            self.head -= 1
 
-    def move_head_right(self):
-        """Moves the head to the right"""
-        if self.head == len(self.tape) - 1:
-            self.tape.append('⊔')
-        self.head += 1
+class TuringMachine:
+    def __init__(self, Q: set, Σ: set, Γ: set, δ: dict, q_0: str, B: str, F: set):
+        assert_all(Q, Σ, Γ, δ, q_0, B, F)
 
-    @property
-    def symbol(self):
-        return self.tape[self.head]
+        self.control = Control(Q, Σ, Γ, δ, q_0, B, F)
+        self.tape = Tape(B)
+        self.tape_head = 0
 
-    @symbol.setter
-    def symbol(self, new_symbol):
-        self.tape[self.head] = new_symbol
-
-    def write_string(self, w: str):
-        check_w(w)
-        for symbol in w:
+    def place_input(self, string: str):
+        assert type(string) is str, 'input is not str'
+        for symbol in string:
             self.tape.append(symbol)
 
+    def instantaneous_description(self) -> str:
+        tape_symbols = self.tape.copy()
+        tape_symbols.insert(self.tape_head, self.control.q)
+        return ' '.join(tape_symbols)
+
     def __next__(self):
-        if self.current_state == self.q_reject:
-            raise StopIteration(f'-> {self.q_reject}: {self}')
-        if self.current_state == self.q_accept:
-            raise StopIteration(f'-> {self.q_accept}: {self}')
+        q = self.control.q  # current state
+        X = self.tape[self.tape_head]  # current symbol
 
-        # The machine does not have a transition for the read symbol
-        if self.symbol not in self.δ[self.current_state]:
-            raise StopIteration(f'-> {self.q_reject}: δ has no transition for state {self}')
+        if q in self.control.F:
+            raise StopIteration('Accept')
 
-        new_symbol, next_state, direction = self.δ[self.current_state][self.symbol]
-        self.symbol = new_symbol
-        self.current_state = next_state
-        if direction == 'L':
-            self.move_head_left()
-        elif direction == 'R':
-            self.move_head_right()
+        try:
+            # p is the next state, in Q
+            # Y is the symbol, in Γ, written in the cell being scanned, replacing whatever symbol was there
+            # D is a direction, either L or R, standing for "left" or "right," respectively,
+            # and telling us the direction in which the head moves.
+            p, Y, D = self.control.δ(q, X)
+        except KeyError:
+            raise StopIteration('Reject')
+
+        self.control.q = p
+
+        self.tape[self.tape_head] = Y
+        if D == 'L':
+            self.tape_head -= 1
+        elif D == 'R':
+            self.tape_head += 1
         # S means "Stay"
+
+        return self.instantaneous_description()
 
     def __iter__(self):
         return self

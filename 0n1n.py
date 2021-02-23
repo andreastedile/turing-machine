@@ -1,47 +1,31 @@
 from src.turing_machine import TuringMachine as TM
 
-Q = {'q_1', 'q_find1', 'q_goback', 'q_exit', 'q_accept', 'q_reject'}
+Q = {'q_0', 'q_1', 'q_2', 'q_3', 'q_4'}
 Σ = {'0', '1'}
-Γ = {'0', '1', 'X', 'Y', '⊔'}
+Γ = {'0', '1', 'X', 'Y', 'B'}
 δ = {
-    'q_1': {
-        '0': ('X', 'q_find1', 'R'),
-        '1': ('1', 'q_reject', 'S'),
-        'X': ('X', 'q_reject', 'S'),
-        'Y': ('Y', 'q_exit', 'R'),
-        '⊔': ('⊔', 'q_accept', 'S')
-    },
-    'q_find1': {
-        '0': ('0', 'q_find1', 'R'),
-        '1': ('Y', 'q_goback', 'L'),
-        'X': ('X', 'q_reject', 'S'),
-        'Y': ('Y', 'q_find1', 'R'),
-        '⊔': ('⊔', 'q_reject', 'S')
-    },
-    'q_goback': {
-        '0': ('0', 'q_goback', 'L'),
-        '1': ('1', 'q_reject', 'S'),
-        'X': ('X', 'q_1', 'R'),
-        'Y': ('Y', 'q_goback', 'L'),
-        '⊔': ('⊔', 'q_reject', 'S')
-    },
-    'q_exit': {
-        '0': ('0', 'q_reject', 'S'),
-        '1': ('1', 'q_reject', 'S'),
-        'X': ('X', 'q_reject', 'S'),
-        'Y': ('Y', 'q_exit', 'R'),
-        '⊔': ('⊔', 'q_accept', 'S')
-    }
+    ('q_0', '0'): ('q_1', 'X', 'R'),
+    ('q_0', 'Y'): ('q_3', 'Y', 'R'),
+
+    ('q_1', '0'): ('q_1', '0', 'R'),
+    ('q_1', '1'): ('q_2', 'Y', 'L'),
+    ('q_1', 'Y'): ('q_1', 'Y', 'R'),
+
+    ('q_2', '0'): ('q_2', '0', 'L'),
+    ('q_2', 'X'): ('q_0', 'X', 'R'),
+    ('q_2', 'Y'): ('q_2', 'Y', 'L'),
+
+    ('q_3', 'Y'): ('q_3', 'Y', 'R'),
+    ('q_3', 'B'): ('q_4', 'B', 'R'),
 }
 
-M = TM(Q, Σ, Γ, δ, 'q_1', 'q_accept', 'q_reject')
-M.write_string('0011')
+M = TM(Q, Σ, Γ, δ, 'q_0', 'B', {'q_4'})
+M.place_input('0011')
 
-M = iter(M)
+print(M.instantaneous_description())
 while True:
-    print(M)
     try:
-        next(M)
+        print(next(M))
     except StopIteration as e:
         print(e)
         break
