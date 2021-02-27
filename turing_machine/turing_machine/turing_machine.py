@@ -1,10 +1,12 @@
+from ordered_set import OrderedSet as Set
+
 from turing_machine.utils.assertions import assert_all
 from turing_machine.control.control import Control
 from turing_machine.tape.tape import Tape
 
 
 class TuringMachine:
-    def __init__(self, Q: set, Σ: set, Γ: set, δ: dict, q_0: str, B: str, F: set):
+    def __init__(self, Q: Set, Σ: Set, Γ: Set, δ: dict, q_0: str, B: str, F: Set):
         assert_all(Q, Σ, Γ, δ, q_0, B, F)
 
         self.control = Control(Q, Σ, Γ, δ, q_0, B, F)
@@ -26,7 +28,7 @@ class TuringMachine:
         assert all(tape_symbol in self.control.Γ for tape_symbol in tape_symbols), \
             'not all tape symbols are in Γ'
 
-        q = (set(instantaneous_description) - set(tape_symbols)).pop()  # current state
+        q = (Set(instantaneous_description) - Set(tape_symbols)).pop()  # current state
         assert q in self.control.Q, 'q is not in Q'
 
         for tape_symbol in tape_symbols:

@@ -1,8 +1,10 @@
+from ordered_set import OrderedSet as Set
+
 from turing_machine.turing_machine.turing_machine import TuringMachine as TM
 
-Q = {'q_0', 'q_1', 'q_2', 'q_3', 'q_4'}
-Σ = {'0', '1'}
-Γ = {'0', '1', 'X', 'Y', 'B'}
+Q = Set(['q_0', 'q_1', 'q_2', 'q_3', 'q_4'])
+Σ = Set(['0', '1'])
+Γ = Set(['0', '1', 'X', 'Y', 'B'])
 δ = {
     ('q_0', '0'): ('q_1', 'X', 'R'),
     ('q_0', 'Y'): ('q_3', 'Y', 'R'),
@@ -19,7 +21,7 @@ Q = {'q_0', 'q_1', 'q_2', 'q_3', 'q_4'}
     ('q_3', 'B'): ('q_4', 'B', 'R'),
 }
 
-M = TM(Q, Σ, Γ, δ, 'q_0', 'B', {'q_4'})
+M = TM(Q, Σ, Γ, δ, 'q_0', 'B', Set(['q_4']))
 M.place_input('0011')
 
 print(M.instantaneous_description())

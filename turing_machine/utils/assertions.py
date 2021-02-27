@@ -1,15 +1,18 @@
-def type_Q(Q: set):
-    assert type(Q) is set, 'Q is not set'
+from ordered_set import OrderedSet as Set
+
+
+def type_Q(Q: Set):
+    assert type(Q) is Set, 'Q is not set'
     assert all(type(state) is str for state in Q), 'Some states of Q are not str'
 
 
-def type_Σ(Σ: set):
-    assert type(Σ) is set, 'Σ is not set'
+def type_Σ(Σ: Set):
+    assert type(Σ) is Set, 'Σ is not set'
     assert all(type(symbol) is str for symbol in Σ), 'Some input symbols of Σ are not str'
 
 
-def type_Γ(Γ: set):
-    assert type(Γ) is set, 'Γ is not set'
+def type_Γ(Γ: Set):
+    assert type(Γ) is Set, 'Γ is not set'
     assert all(type(tape_symbol) is str for tape_symbol in Γ), 'Some tape symbols of Γ are not str'
 
 
@@ -36,29 +39,29 @@ def type_B(B: str):
     assert type(B) is str, 'B is not str'
 
 
-def type_F(F: set):
-    assert type(F) is set, 'F is not set'
+def type_F(F: Set):
+    assert type(F) is Set, 'F is not set'
     assert all(type(state) is str for state in F), 'Some states of F are not str'
 
 
-def Σ_subset_Γ(Σ: set, Γ: set):
+def Σ_subset_Γ(Σ: Set, Γ: Set):
     assert Σ.issubset(Γ), 'Σ is not subset of Γ'
 
 
-def q_0_member_Q(q_0: str, Q: set):
+def q_0_member_Q(q_0: str, Q: Set):
     assert q_0 in Q, 'q_0 is not in Q'
 
 
-def B_member_Γ_not_Σ(B: str, Γ: set, Σ: set):
+def B_member_Γ_not_Σ(B: str, Γ: Set, Σ: Set):
     assert B in Γ, 'B is not in Γ'
     assert B not in Σ.difference(Γ), 'B is in Σ'
 
 
-def F_subset_Q(F: set, Q: set):
+def F_subset_Q(F: Set, Q: Set):
     assert F.issubset(Q), 'F is not subset of Q'
 
 
-def transitions_δ(δ: dict, Q: set, Γ: set):
+def transitions_δ(δ: dict, Q: Set, Γ: Set):
     all(q in Q for q, _ in δ.keys())
     all(X in Γ for _, X in δ.keys())
 
@@ -67,7 +70,7 @@ def transitions_δ(δ: dict, Q: set, Γ: set):
     all(D == 'L' or D == 'R' for _, _, D in δ.values())
 
 
-def assert_all(Q: set, Σ: set, Γ: set, δ, q_0, B, F: set):
+def assert_all(Q: Set, Σ: Set, Γ: Set, δ, q_0, B, F: Set):
     type_Q(Q)
     type_Σ(Σ)
     type_Γ(Γ)

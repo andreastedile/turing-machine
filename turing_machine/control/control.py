@@ -1,5 +1,8 @@
+from ordered_set import OrderedSet as Set
+
+
 class Control:
-    def __init__(self, Q: set, Σ: set, Γ: set, δ: dict, q_0: str, B: str, F: set):
+    def __init__(self, Q: Set, Σ: Set, Γ: Set, δ: dict, q_0: str, B: str, F: Set):
         self.Q = Q
         self.Σ = Σ
         self.Γ = Γ
