@@ -3,11 +3,15 @@ from math import log10
 
 from ordered_set import OrderedSet as Set
 
+from turing_machine.utils.assertions import assert_all
+
 
 class Control:
     regex = compile('^(0+)(10+)(10+)(10+)(10+)$')
 
     def __init__(self, Q: Set, Σ: Set, Γ: Set, δ: dict, q_0: str, B: str, F: Set):
+        assert_all(Q, Σ, Γ, δ, q_0, B, F)
+
         self.Q = Q
         self.Σ = Σ
         self.Γ = Γ

@@ -1,14 +1,11 @@
 from ordered_set import OrderedSet as Set
 
-from turing_machine.utils.assertions import assert_all
 from turing_machine.control.control import Control
 from turing_machine.tape.tape import Tape
 
 
 class TuringMachine:
     def __init__(self, Q: Set, Σ: Set, Γ: Set, δ: dict, q_0: str, B: str, F: Set):
-        assert_all(Q, Σ, Γ, δ, q_0, B, F)
-
         self.control = Control(Q, Σ, Γ, δ, q_0, B, F)
         self.tape = Tape(B)
         self.tape_head = 0
