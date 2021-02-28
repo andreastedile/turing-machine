@@ -4,7 +4,7 @@ from turing_machine.turing_machine.turing_machine import TuringMachine as TM
 
 Q = Set(['q_0', 'q_1', 'q_2', 'q_3', 'q_4'])
 Σ = Set(['0', '1'])
-Γ = Set(['0', '1', 'X', 'Y', 'B'])
+Γ = Set(['0', '1', 'B', 'X', 'Y'])
 δ = {
     ('q_0', '0'): ('q_1', 'X', 'R'),
     ('q_0', 'Y'): ('q_3', 'Y', 'R'),
