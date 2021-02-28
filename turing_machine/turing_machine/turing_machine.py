@@ -41,6 +41,11 @@ class TuringMachine:
         tape_symbols.insert(self.tape_head, self.control.q)
         return tape_symbols
 
+    @classmethod
+    def from_encoding(cls, encoding: str):
+        control = Control.from_encoding(encoding)
+        return cls(control.Q, control.Σ, control.Γ, control._δ, control.q_0, control.B, control.F)
+
     def __next__(self):
         q = self.control.q  # current state
         X = self.tape[self.tape_head]  # current symbol
