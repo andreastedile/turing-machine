@@ -14,22 +14,13 @@ class TuringMachine:
         self.tape_head = 0
 
     def place_input(self, string: str):
-        assert type(string) is str, 'input is not str'
         for symbol in string:
             self.tape.append(symbol)
 
     def resume(self, instantaneous_description: list):
-        assert len(self.tape) == 0, 'tape is not empty'
-        assert type(instantaneous_description) is list, 'instantaneous description is not list'
-
         tape_symbols = [tape_symbol for tape_symbol in instantaneous_description if tape_symbol in self.control.Γ]
-        assert len(tape_symbols) == len(instantaneous_description) - 1, \
-            'length of tape symbols is not length of instantaneous description - 1'
-        assert all(tape_symbol in self.control.Γ for tape_symbol in tape_symbols), \
-            'not all tape symbols are in Γ'
 
         q = (Set(instantaneous_description) - Set(tape_symbols)).pop()  # current state
-        assert q in self.control.Q, 'q is not in Q'
 
         for tape_symbol in tape_symbols:
             self.tape.append(tape_symbol)

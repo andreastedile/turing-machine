@@ -39,11 +39,3 @@ class TestTuringMachine(TestCase):
 
         self.assertIsInstance(si, StopIteration)
         self.assertEqual(str(si), 'Accept')
-
-    def test_resume_extra_state(self):
-        with self.assertRaises(AssertionError):
-            self.M.resume(['X', 'X', 'q_0', 'Y', 'q_0', 'Y', ])
-
-    def test_resume_unknown_symbol(self):
-        with self.assertRaises(AssertionError):
-            self.M.resume(['X', 'X', 'q_0', 'Y', 'foo', 'Y', ])
